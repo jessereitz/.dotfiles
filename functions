@@ -1,0 +1,8 @@
+function oprah() {
+  GIT_ROOT=$(git rev-parse --show-toplevel)
+  docker run \
+    --rm \
+    --volume "$GIT_ROOT:/app" \
+    --volume "$HOME/.gitconfig:/root/.gitconfig" \
+    ordoro/legithub:latest "$@"
+}
