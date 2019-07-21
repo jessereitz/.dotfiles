@@ -1,3 +1,11 @@
+# Open the file manager (taken from Mac)
+function open() {
+  if [ $OS_ENV == "Linux" ]; then
+    nautilus $* &
+  else
+    open $* &
+  fi
+}
 function oprah() {
   GIT_ROOT=$(git rev-parse --show-toplevel)
   docker run \
