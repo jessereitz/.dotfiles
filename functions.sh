@@ -15,7 +15,7 @@ function terminal() {
     exit
   fi
 
-  settings_file=~/.gnome_terminal_settings.txt
+  settings_file=~/.bash_settings/gnome_terminal_settings.txt
   action=$1
 
   case "$action" in
