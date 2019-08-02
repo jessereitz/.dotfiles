@@ -1,7 +1,7 @@
 # Open the file manager (taken from Mac)
 function open() {
   if [ $OS_ENV == "Linux" ]; then
-    nautilus $* &
+    xdg-open $* &
   else
     open $* &
   fi
