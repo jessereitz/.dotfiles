@@ -1,12 +1,22 @@
 # Open the file manager (taken from Mac)
-function open() {
-  if [ $OS_ENV == "Linux" ]; then
+
+if [ $OS_ENV == "Linux" ]; then
+  function open() {
     xdg-open $* &
-  else
-    open $* &
+  }
+fi
+
+
+function cd() {
+  builtin cd $*
+  if [ -d .env ]; then
+    source .env/bin/activate
+  elif [ -d .env2 ]; then
+    source .env2/bin/activate
+  elif [ -d .env_py2 ]; then
+    source .env_py2/bin/activate
   fi
 }
-
 
 # Backup/Restore Gnome terminal
 function terminal() {
