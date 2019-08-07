@@ -1,12 +1,3 @@
-# Open the file manager (taken from Mac)
-
-if [ $OS_ENV == "Linux" ]; then
-  function open() {
-    xdg-open $* &
-  }
-fi
-
-
 function cd() {
   builtin cd $*
   if [ -d .env ]; then
