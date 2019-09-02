@@ -10,4 +10,6 @@ alias py="python"
 
 if [ $OS_ENV == "Linux" ]; then
   alias open="xdg-open"
+  alias pbcopy="xclip -selection clipboard"
+  alias pbpaste="xclip -selection clipboard -o"
 fi
