@@ -7,6 +7,7 @@ alias ccat="source-highlight --out-format=esc256 -o STDOUT -i"
 alias exe="chmod +x $1"
 alias getip="curl icanhazip.com"
 alias py="python"
+alias cod="code"
 
 if [ $OS_ENV == "Linux" ]; then
   alias open="xdg-open"
