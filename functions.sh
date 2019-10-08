@@ -1,14 +1,3 @@
-function cd() {
-  builtin cd $*
-  if [ -d .env ]; then
-    source .env/bin/activate
-  elif [ -d .env2 ]; then
-    source .env2/bin/activate
-  elif [ -d .env_py2 ]; then
-    source .env_py2/bin/activate
-  fi
-}
-
 # Backup/Restore Gnome terminal
 function terminal() {
   if [ ! $OS_ENV == "Linux" ]; then
@@ -95,6 +84,6 @@ function snakefood() {
 }
 
 function shrug() {
-  echo '¯\_(ツ)_/¯' 
+  echo '¯\_(ツ)_/¯'
   echo '¯\_(ツ)_/¯' | pbcopy
 }
