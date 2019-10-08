@@ -8,7 +8,7 @@ export OS_ENV=$OS_ENV
 
 # Set up weird python path stuff for Mackerel
 export CODE_HOME=~/ordoro
-export PYTHONPATH=${CODE_HOME}/mackerel/conf:${CODE_HOME}/mackerel/supplier-feeds:${CODE_HOME}/whistlepig/2.0/lib:${CODE_HOME}/mackerel/lib/
+export PYTHONPATH=${CODE_HOME}/mackerel/conf:${CODE_HOME}/mackerel/supplier-feeds:${CODE_HOME}/mackerel/lib/
 export MACKEREL_HOME=${CODE_HOME}/mackerel
 export MACKEREL_ENV='DEV'
 
