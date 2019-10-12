@@ -8,6 +8,7 @@ alias exe="chmod +x $1"
 alias getip="curl icanhazip.com"
 alias py="python"
 alias py3="python3"
+alias pip="pip3"
 alias cod="code"
 alias gti="git"
 
