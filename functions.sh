@@ -41,15 +41,6 @@ function terminal() {
   fi
 }
 
-function oprah() {
-  GIT_ROOT=$(git rev-parse --show-toplevel)
-  docker run \
-    --rm \
-    --volume "$GIT_ROOT:/app" \
-    --volume "$HOME/.gitconfig:/root/.gitconfig" \
-    ordoro/legithub:latest "$@"
-}
-
 function flushdns() {
   if [ ! $OS_ENV == "Linux" ]; then
     sudo killall -HUP mDNSResponder
@@ -57,11 +48,6 @@ function flushdns() {
   fi
   sudo systemd-resolve --flush-caches
 
-}
-
-function jesseco() {
-  echo 563955
-  echo 563955 | pbcopy
 }
 
 function up {
@@ -72,23 +58,16 @@ function up {
   done
 }
 
-function activate_mack() {
- source /Users/jessereitz/integrations/mackerel/.env/bin/activate
-}
-
-function connect_db() {
-  psql -U jesse -d ordoro -h localhost -p 5489
-}
-
-function connect_mack_server() {
-  ssh jesse@whistlepig.aws-prod.ordoro.com
-}
-
-function snakefood() {
-  sfood . | sfood-graph | dot -Tps | pstopdf -i
-}
-
 function shrug() {
   echo '¯\_(ツ)_/¯'
   echo '¯\_(ツ)_/¯' | pbcopy
+}
+
+function gitter {
+    current_branch=`git rev-parse --abbrev-ref HEAD`
+
+    echo "Pull recent changes to master, deleting current branch ${current_branch}"
+    git co master &&
+    git pull &&
+    git br -d $current_branch
 }
