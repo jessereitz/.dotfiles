@@ -20,9 +20,9 @@ case "${unameOut}" in
     *)          OS_ENV="UNKNOWN:${unameOut}";;
 esac
 export OS_ENV=$OS_ENV
-export BASH_CONFIG="${HOME}/.bash_settings"
+# export BASH_CONFIG="${HOME}/.bash_settings"
 # TODO: use .dotfiles instead of .bash_settings
-# export BASH_CONFIG="${HOME}/.dotfiles"
+export BASH_CONFIG="${HOME}/.dotfiles"
 
 ######################################################################
 # Aliases: A simple affair
@@ -195,10 +195,10 @@ function initialize_all {
 ######################################################################
 # Third Party Scripts: some people just do it better
 ######################################################################
-if [ -f ~/.bash_settings/git-completion.bash ]; then
-    . ~/.bash_settings/git-completion.bash
+if [ -f $BASH_CONFIG/git-completion.bash ]; then
+    . $BASH_CONFIG/git-completion.bash
 fi
 
-if [ -f ~/.bash_settings/git-prompt.sh ]; then
-    . ~/.bash_settings/git-prompt.sh
+if [ -f $BASH_CONFIG/git-prompt.sh ]; then
+    . $BASH_CONFIG/git-prompt.sh
 fi
