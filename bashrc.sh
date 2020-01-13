@@ -1,8 +1,18 @@
-############################################################
-# Global Variables: Some convenient settings and values
-############################################################
+######################################################################
+# Jesse R's Bash Profile:
+#
+# Some settings I like. I only use MacOS and Ubuntu-derivatives so
+# this is tailor-made for that.
+#
+#     https://github.com/jessereitz/mac_bash
+#
+######################################################################
 
-# Determine which OS we're using -> useful for aliasing
+######################################################################
+# Global Variables: Some convenient settings and values
+######################################################################
+
+# Determine which OS we're using -> useful for same aliases on different machines
 unameOut="$(uname -s)"
     case "${unameOut}" in
         Linux*)     OS_ENV=Linux;;
@@ -12,9 +22,9 @@ unameOut="$(uname -s)"
 export OS_ENV=$OS_ENV
 
 
-############################################################
+######################################################################
 # Aliases: A simple affair
-############################################################
+######################################################################
 alias ll="ls -lah"
 alias l="ls"
 alias wp='ssh whistlepig.aws-prod.ordoro.com'
@@ -34,9 +44,9 @@ if [ $OS_ENV == "Linux" ]; then
 fi
 
 
-############################################################
+######################################################################
 # Functions: A more complicated affair
-############################################################
+######################################################################
 
 # Backup/Restore Gnome terminal
 function terminal() {
@@ -116,9 +126,9 @@ function gitter {
 }
 
 
-############################################################
+######################################################################
 # Colors: a more palatable command line
-############################################################
+######################################################################
 export CLICOLOR=1
 export LSCOLORS=ExFxBxDxCxegedabagacad
 
@@ -153,9 +163,9 @@ bash_prompt() {
 PROMPT_COMMAND=bash_prompt
 
 
-############################################################
+######################################################################
 # Third Party Scripts: some people just do it better
-############################################################
+######################################################################
 if [ -f ~/.bash_settings/git-completion.bash ]; then
     . ~/.bash_settings/git-completion.bash
 fi
