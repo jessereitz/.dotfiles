@@ -1,18 +1,6 @@
-[core]
-  excludesfile = ~/.gitignore_global
-
 [user]
 	email = jessereitz1@gmail.com
 	name = Jesse Reitz
-
-[includeIf "gitdir:~/ordoro/*"]
-  # Change git user.email for ordoro projects
-  path = ~/ordoro/.gitconfig_include
-
-[ordoro]
-  # Configuration for legithub, aka oprah
-  user = jessereitz
-  token = 7b6efdc413cddc2c4f57f8cdc0111ff07d3fa914
 
 [alias]
   st = status

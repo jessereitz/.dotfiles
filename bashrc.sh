@@ -125,6 +125,9 @@ function gitter {
     git br -d $current_branch
 }
 
+function gitconfig {
+    cat ./.gitconfig >> ~/.gitconfig
+}
 
 ######################################################################
 # Colors: a more palatable command line
