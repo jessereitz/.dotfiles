@@ -20,6 +20,7 @@ export ORDORO_LOCATION=62055
 
 export ORDORO_CSP_PATH=/Users/jessereitz/Bonnie/cloud_sql_proxy
 export ORDORO_DB_CONNECTIONS=(
+    "db master prod 5431"
     "db slave prod 5433"
     "db task prod 5440"
     "db mackerel prod 5489"
