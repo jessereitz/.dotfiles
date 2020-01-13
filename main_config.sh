@@ -14,13 +14,15 @@
 
 # Determine which OS we're using -> useful for same aliases on different machines
 unameOut="$(uname -s)"
-    case "${unameOut}" in
-        Linux*)     OS_ENV=Linux;;
-        Darwin*)    OS_ENV=Mac;;
-        *)          OS_ENV="UNKNOWN:${unameOut}";;
-    esac
+case "${unameOut}" in
+    Linux*)     OS_ENV=Linux;;
+    Darwin*)    OS_ENV=Mac;;
+    *)          OS_ENV="UNKNOWN:${unameOut}";;
+esac
 export OS_ENV=$OS_ENV
-
+export BASH_CONFIG="${HOME}/.bash_settings"
+# TODO: use .dotfiles instead of .bash_settings
+# export BASH_CONFIG="${HOME}/.dotfiles"
 
 ######################################################################
 # Aliases: A simple affair
@@ -125,10 +127,6 @@ function gitter {
     git br -d $current_branch
 }
 
-function gitconfig {
-    cat ./.gitconfig >> ~/.gitconfig
-}
-
 ######################################################################
 # Colors: a more palatable command line
 ######################################################################
@@ -165,6 +163,30 @@ bash_prompt() {
 
 PROMPT_COMMAND=bash_prompt
 
+
+######################################################################
+# Initial Configuration: set some stuff up
+######################################################################
+function gitconfig {
+    echo "Copying global gitconfig"
+    cat ./.gitconfig >> ~/.gitconfig
+    echo "Done copying global gitconfig"
+}
+
+function setup_vim {
+    echo "Initializing vim"
+    cp -r $BASH_CONFIG/.vim ~/.vim
+    echo "Installing vim plugins"
+    vim +PlugInstall +qall
+    echo "Done initializing vim"
+}
+
+function initialize_all {
+    echo "Initializing bash and vim settings"
+    gitconfig
+    setup_vim
+    echo "Done."
+}
 
 ######################################################################
 # Third Party Scripts: some people just do it better
