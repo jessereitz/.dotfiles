@@ -1,0 +1,77 @@
+" vimrc
+set nocompatible                " No vi legacy
+syntax enable                   " Enable syntax processing
+colorscheme peachpuff           " Set colorscheme
+
+set clipboard=unnamed
+
+set encoding=utf-8              " Set encoding to UTF-8
+
+"" Whitespace
+set nowrap                      " Don't wrap lines
+set tabstop=2                   " Set number of visual spaces per TAB 
+set shiftwidth=2                " Set number of spaces in TAB when editing (real number of spaces)
+set expandtab                   " Insert spaces, not tabs
+
+"" UI Config
+set number                      " Show line numbers
+set showcmd                     " Display incomplete commands
+set cursorline                  " Highlight the current line
+filetype indent on              " Load filetype-specific indent files
+set wildmenu                    " Visual autocomplete for command menu
+set lazyredraw                  " Don't redraw screen when it's not necessary
+set showmatch                   " Highlight matching [{()}]
+
+set backspace=indent,eol,start  " Backspace through everything in insert mode
+
+"" Searching
+set incsearch                   " Search as characeters are entered
+set hlsearch                    " Highlight matches
+" Map escape key to search for empty string. Effectively turns off search highlighting
+nnoremap <F3> :let @/ = ''<CR>
+set ignorecase                  " Searches are case insensitive unless...
+set smartcase                   " ... they contain at least one capital letter
+
+"" Folding
+set foldenable                  " Enable folding
+set foldlevelstart=10           " Open most folds by default
+set foldnestmax=10              " 10 nested fold max
+" Space open/closes folds
+nnoremap <space> za
+set foldmethod=indent           " Fold based on indent level
+
+"" Custom Movement Stuff
+nnoremap gV `[v`]
+
+"" PLUGINS
+" Before initializing vim-plug, set up ackprg to use ag instead of ack
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
+
+"" Install vim-plug if not installed.
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+" Start vim-plug
+call plug#begin('~/.vim/plugged')
+
+" Install ack.vim
+Plug 'mileszs/ack.vim'
+
+" Install NerdTree
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+let NERDTreeShowHidden=1
+map <C-n> :NERDTreeToggle<CR>
+
+" Install Polyglot language pack
+Plug 'sheerun/vim-polyglot'
+
+" Install csv.vim
+Plug 'chrisbra/csv.vim'
+
+" End vim-plug
+call plug#end()
