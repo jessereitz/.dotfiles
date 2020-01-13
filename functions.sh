@@ -51,7 +51,12 @@ function oprah() {
 }
 
 function flushdns() {
-  sudo killall -HUP mDNSResponder
+  if [ ! $OS_ENV == "Linux" ]; then
+    sudo killall -HUP mDNSResponder
+    exit
+  fi
+  sudo systemd-resolve --flush-caches
+
 }
 
 function jesseco() {
