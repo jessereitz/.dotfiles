@@ -42,7 +42,7 @@ fi
 function terminal() {
     if [ ! $OS_ENV == "Linux" ]; then
         echo "This isn't Linux. Don't even try."
-        exit
+        return
     fi
 
     settings_file=~/.bash_settings/gnome_terminal_settings.txt
