@@ -167,7 +167,9 @@ PROMPT_COMMAND=bash_prompt
 ######################################################################
 function gitconfig {
     echo "Copying global gitconfig"
-    cat ./.gitconfig >> ~/.gitconfig
+    cat $BASH_CONFIG/.gitconfig >> ~/.gitconfig
+    echo "Copying global gitignore"
+    cp $BASH_CONFIG/.gitignore_global ~/.gitignore_global
     echo "Done copying global gitconfig"
 }
 
