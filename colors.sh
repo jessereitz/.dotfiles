@@ -29,7 +29,4 @@ bash_prompt() {
     __git_ps1 "$PYTHON_VIRTUALENV$Cya\u$None@$Gre\h:$Yel\w$None" "$None$ "
 }
 
-
-
 PROMPT_COMMAND=bash_prompt
-

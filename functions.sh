@@ -44,7 +44,7 @@ function terminal() {
 function flushdns() {
   if [ ! $OS_ENV == "Linux" ]; then
     sudo killall -HUP mDNSResponder
-    exit
+    return
   fi
   sudo systemd-resolve --flush-caches
 

@@ -1,34 +1,41 @@
-source ~/.bash_settings/aliases.sh
-source ~/.bash_settings/colors.sh
-
 ############################################################
-# Source some git stuff
-############################################################
-if [ -f ~/.bash_settings/git-completion.bash ]; then
-    . ~/.bash_settings/git-completion.bash
-fi
-
-if [ -f ~/.bash_settings/git-prompt.sh ]; then
-    . ~/.bash_settings/git-prompt.sh
-fi
-
-
-############################################################
-# Set some global variables
+# Global Variables: Some convenient settings and values
 ############################################################
 
 # Determine which OS we're using -> useful for aliasing
 unameOut="$(uname -s)"
-case "${unameOut}" in
-    Linux*)     OS_ENV=Linux;;
-    Darwin*)    OS_ENV=Mac;;
-    *)          OS_ENV="UNKNOWN:${unameOut}";;
-esac
+    case "${unameOut}" in
+        Linux*)     OS_ENV=Linux;;
+        Darwin*)    OS_ENV=Mac;;
+        *)          OS_ENV="UNKNOWN:${unameOut}";;
+    esac
 export OS_ENV=$OS_ENV
 
 
 ############################################################
-# Set some global variables
+# Aliases: A simple affair
+############################################################
+alias ll="ls -lah"
+alias l="ls"
+alias wp='ssh whistlepig.aws-prod.ordoro.com'
+alias ccat="source-highlight --out-format=esc256 -o STDOUT -i"
+alias exe="chmod +x $1"
+alias getip="curl icanhazip.com"
+alias py="python"
+alias py3="python3"
+alias pip="pip3"
+alias cod="code"
+alias gti="git"
+
+if [ $OS_ENV == "Linux" ]; then
+  alias open="xdg-open"
+  alias pbcopy="xclip -selection clipboard"
+  alias pbpaste="xclip -selection clipboard -o"
+fi
+
+
+############################################################
+# Functions: A more complicated affair
 ############################################################
 
 # Backup/Restore Gnome terminal
@@ -107,3 +114,52 @@ function gitter {
     git pull &&
     git br -d $current_branch
 }
+
+
+############################################################
+# Colors: a more palatable command line
+############################################################
+export CLICOLOR=1
+export LSCOLORS=ExFxBxDxCxegedabagacad
+
+Red='\[\e[0;31m\]'; BRed='\[\e[1;91m\]'
+Gre='\[\e[0;32m\]'; BGre='\[\e[1;92m\]'
+Yel='\[\e[0;33m\]'; BYel='\[\e[1;93m\]'
+Blu='\[\e[0;34m\]'; BBlu='\[\e[1;94m\]'
+Mag='\[\e[0;35m\]'; BMag='\[\e[1;95m\]'
+Cya='\[\e[0;36m\]'; BCya='\[\e[1;96m\]'
+Whi='\[\e[0;37m\]'; BWhi='\[\e[1;97m\]'
+None='\[\e[0m\]'
+
+function set_virtualenv () {
+    if test -z "$VIRTUAL_ENV" ; then
+        PYTHON_VIRTUALENV=""
+    else
+        PYTHON_VIRTUALENV="$None[$Mag`basename \"$VIRTUAL_ENV\"`$None] "
+    fi
+}
+
+bash_prompt() {
+    set_virtualenv
+
+    local GIT_PS1_SHOWDIRTYSTATE=True
+    local GIT_PS1_SHOWSTASHSTATE=True
+    local GIT_PS1_SHOWCOLORHINTS=True
+    local GIT_PS1_SHOWUNTRACKEDFILES=True
+
+    __git_ps1 "$PYTHON_VIRTUALENV$Cya\u$None@$Gre\h:$Yel\w$None" "$None$ "
+}
+
+PROMPT_COMMAND=bash_prompt
+
+
+############################################################
+# Third Party Scripts: some people just do it better
+############################################################
+if [ -f ~/.bash_settings/git-completion.bash ]; then
+    . ~/.bash_settings/git-completion.bash
+fi
+
+if [ -f ~/.bash_settings/git-prompt.sh ]; then
+    . ~/.bash_settings/git-prompt.sh
+fi
