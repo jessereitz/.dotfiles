@@ -1,9 +1,9 @@
 [user]
-	email = jessereitz1@gmail.com
-	name = Jesse Reitz
+    email = jessereitz1@gmail.com
+    name = Jesse Reitz
 
 [alias]
-  st = status
-  br = branch
-  co = checkout
-  ci = commit
+    st = status
+    br = branch
+    co = checkout
+    ci = commit

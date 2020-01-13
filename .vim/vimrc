@@ -9,8 +9,8 @@ set encoding=utf-8              " Set encoding to UTF-8
 
 "" Whitespace
 set nowrap                      " Don't wrap lines
-set tabstop=2                   " Set number of visual spaces per TAB 
-set shiftwidth=2                " Set number of spaces in TAB when editing (real number of spaces)
+set tabstop=4                   " Set number of visual spaces per TAB
+set shiftwidth=4                " Set number of spaces in TAB when editing (real number of spaces)
 set expandtab                   " Insert spaces, not tabs
 
 "" UI Config

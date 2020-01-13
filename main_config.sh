@@ -174,6 +174,10 @@ function gitconfig {
 }
 
 function setup_vim {
+    if [ -d ~/.vim ]; then
+        echo "Removing old vim config"
+        rm -rf ~/.vim
+    fi
     echo "Initializing vim"
     cp -r $BASH_CONFIG/.vim ~/.vim
     echo "Installing vim plugins"
