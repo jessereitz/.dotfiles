@@ -20,8 +20,6 @@ case "${unameOut}" in
     *)          OS_ENV="UNKNOWN:${unameOut}";;
 esac
 export OS_ENV=$OS_ENV
-# export BASH_CONFIG="${HOME}/.bash_settings"
-# TODO: use .dotfiles instead of .bash_settings
 export BASH_CONFIG="${HOME}/.dotfiles"
 
 ######################################################################
@@ -57,7 +55,7 @@ function terminal() {
         return
     fi
 
-    settings_file=~/.bash_settings/gnome_terminal_settings.txt
+    settings_file=$BASH_CONFIG/terminal_configs/gnome_terminal_settings.txt
     action=$1
 
     case "$action" in
@@ -195,10 +193,10 @@ function initialize_all {
 ######################################################################
 # Third Party Scripts: some people just do it better
 ######################################################################
-if [ -f $BASH_CONFIG/git-completion.bash ]; then
-    . $BASH_CONFIG/git-completion.bash
+if [ -f $BASH_CONFIG/third_party/git-completion.bash ]; then
+    . $BASH_CONFIG/third_party/git-completion.bash
 fi
 
-if [ -f $BASH_CONFIG/git-prompt.sh ]; then
-    . $BASH_CONFIG/git-prompt.sh
+if [ -f $BASH_CONFIG/third_party/git-prompt.sh ]; then
+    . $BASH_CONFIG/third_party/git-prompt.sh
 fi
