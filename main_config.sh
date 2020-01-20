@@ -27,20 +27,20 @@ export BASH_CONFIG="${HOME}/.dotfiles"
 ######################################################################
 alias ll="ls -lah"
 alias l="ls"
-alias wp='ssh whistlepig.aws-prod.ordoro.com'
 alias ccat="source-highlight --out-format=esc256 -o STDOUT -i"
 alias exe="chmod +x $1"
 alias getip="curl icanhazip.com"
 alias py="python"
 alias py3="python3"
 alias pip="pip3"
-alias cod="code"
+alias cod="code"  # I'm bad at spelling
 alias gti="git"
 
 if [ $OS_ENV == "Linux" ]; then
-  alias open="xdg-open"
-  alias pbcopy="xclip -selection clipboard"
-  alias pbpaste="xclip -selection clipboard -o"
+    # I really like some of Mac's built in utilities
+    alias open="xdg-open"  # Open the given directory in file manager
+    alias pbcopy="xclip -selection clipboard"  # pipe input to the clipboard
+    alias pbpaste="xclip -selection clipboard -o"  # pip input from the clipboard
 fi
 
 
@@ -112,12 +112,13 @@ function up() {
 }
 
 function shrug() {
-    echo '¯\_(ツ)_/¯'
-    echo '¯\_(ツ)_/¯' | pbcopy
+    echo "¯\_(ツ)_/¯"
+    echo "¯\_(ツ)_/¯" | pbcopy
 }
 
 function gitter {
-    TARGET_BRANCH=master
+    # Clean up after a PR merge -> pull changes, switch to target branch, delete current branch
+    TARGET_BRANCH=dev
     for ARGUMENT in "$@"; do
         KEY=$(echo $ARGUMENT | cut -f1 -d=)
         VALUE=$(echo $ARGUMENT | cut -f2 -d=)
@@ -138,7 +139,7 @@ function gitter {
 }
 
 ######################################################################
-# Colors: a more palatable command line
+# Colors and Prompt: a more palatable command line
 ######################################################################
 export CLICOLOR=1
 export LSCOLORS=ExFxBxDxCxegedabagacad
@@ -152,6 +153,8 @@ Cya='\[\e[0;36m\]'; BCya='\[\e[1;96m\]'
 Whi='\[\e[0;37m\]'; BWhi='\[\e[1;97m\]'
 None='\[\e[0m\]'
 
+
+# Set up my bash prompt with py virtualenv and some git info
 function set_virtualenv () {
     if test -z "$VIRTUAL_ENV" ; then
         PYTHON_VIRTUALENV=""
