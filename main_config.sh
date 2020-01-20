@@ -25,8 +25,9 @@ export BASH_CONFIG="${HOME}/.dotfiles"
 ######################################################################
 # Aliases: A simple affair
 ######################################################################
-alias ll="ls -lah"
-alias l="ls"
+alias ll="ls -lah --color=always"
+alias l="ls --color=always"
+alias less="less -R"
 alias ccat="source-highlight --out-format=esc256 -o STDOUT -i"
 alias exe="chmod +x $1"
 alias getip="curl icanhazip.com"
