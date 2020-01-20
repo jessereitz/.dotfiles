@@ -17,7 +17,7 @@ case "${unameOut}" in
     Darwin*)    config_file=~/.bash_profile;;
     *)          echo "unkown OS" && exit;;
 esac &&
-git clone https://github.com/jessereitz/.dotfiles &&
+git clone git@github.com:jessereitz/.dotfiles &&
 echo "source $HOME/.dotfiles/main_config.sh" >> $config_file &&
 source $config_file &&
 initialize_all
