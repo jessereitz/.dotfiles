@@ -19,7 +19,7 @@ sudo apt-get update
 
 # Let apt use HTTPS
 echo "Installing packages required for apt over HTTPS"
-sudo apt-get install \
+sudo apt-get install -y \
     apt-transport-https \
     ca-certificates \
     curl \
@@ -48,7 +48,7 @@ sudo apt-get-update
 
 # Install that sucka
 echo "Actually installing docker starting... now."
-sudo apt-get install docker-ce docker-ce-cli containerd.io
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 
 # Sanity check to make sure it worked
 echo "Did it work?"
