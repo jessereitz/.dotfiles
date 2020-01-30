@@ -172,7 +172,10 @@ bash_prompt() {
     local GIT_PS1_SHOWCOLORHINTS=True
     local GIT_PS1_SHOWUNTRACKEDFILES=True
 
-    __git_ps1 "$PYTHON_VIRTUALENV$Cya\u$None@$Gre\h:$Yel\w$None" "$None$ "
+    if [ -z $DISPLAY_HOSTNAME ]; then
+        $DISPLAY_HOSTNAME="\h"
+    fi
+    __git_ps1 "$PYTHON_VIRTUALENV$Cya\u$None@$Gre${DISPLAY_HOSTNAME}:$Yel\w$None" "$None$ "
 }
 
 PROMPT_COMMAND=bash_prompt
