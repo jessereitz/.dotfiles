@@ -25,8 +25,8 @@ export BASH_CONFIG="${HOME}/.dotfiles"
 ######################################################################
 # Aliases: A simple affair
 ######################################################################
-alias ll="ls -lah --color=always"
-alias l="ls --color=always"
+alias ll="ls -lah -G"
+alias l="ls -G"
 alias less="less -R"
 alias ccat="source-highlight --out-format=esc256 -o STDOUT -i"
 alias exe="chmod +x $1"
@@ -172,10 +172,7 @@ bash_prompt() {
     local GIT_PS1_SHOWCOLORHINTS=True
     local GIT_PS1_SHOWUNTRACKEDFILES=True
 
-    if [ -z $DISPLAY_HOSTNAME ]; then
-        $DISPLAY_HOSTNAME="\h"
-    fi
-    __git_ps1 "$PYTHON_VIRTUALENV$Cya\u$None@$Gre${DISPLAY_HOSTNAME}:$Yel\w$None" "$None$ "
+    __git_ps1 "$PYTHON_VIRTUALENV$Cya\u$None@$Gre\h:$Yel\w$None" "$None$ "
 }
 
 PROMPT_COMMAND=bash_prompt
