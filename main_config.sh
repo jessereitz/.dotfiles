@@ -166,13 +166,15 @@ function set_virtualenv () {
 
 bash_prompt() {
     set_virtualenv
-
+    if [ -z $DISPLAY_HOSTNAME ]; then
+        DISPLAY_HOSTNAME=`hostname`
+    fi
     local GIT_PS1_SHOWDIRTYSTATE=True
     local GIT_PS1_SHOWSTASHSTATE=True
     local GIT_PS1_SHOWCOLORHINTS=True
     local GIT_PS1_SHOWUNTRACKEDFILES=True
 
-    __git_ps1 "$PYTHON_VIRTUALENV$Cya\u$None@$Gre\h:$Yel\w$None" "$None$ "
+    __git_ps1 "$PYTHON_VIRTUALENV$Cya\u$None@$Gre$DISPLAY_HOSTNAME:$Yel\w$None" "$None$ "
 }
 
 PROMPT_COMMAND=bash_prompt
