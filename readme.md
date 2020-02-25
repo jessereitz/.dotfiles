@@ -10,6 +10,7 @@ My bash and vim setup
 4. `initialize_all`
 
 ### Copy & Paste
+#### SSH
 ```bash
 unameOut="$(uname -s)" &&
 case "${unameOut}" in
@@ -18,6 +19,20 @@ case "${unameOut}" in
     *)          echo "unkown OS" && exit;;
 esac &&
 git clone git@github.com:jessereitz/.dotfiles &&
+echo "source $HOME/.dotfiles/main_config.sh" >> $config_file &&
+source $config_file &&
+initialize_all
+```
+
+#### HTTPS
+```bash
+unameOut="$(uname -s)" &&
+case "${unameOut}" in
+    Linux*)     config_file=~/.bashrc;;
+    Darwin*)    config_file=~/.bash_profile;;
+    *)          echo "unkown OS" && exit;;
+esac &&
+git clone https://github.com/jessereitz/.dotfiles &&
 echo "source $HOME/.dotfiles/main_config.sh" >> $config_file &&
 source $config_file &&
 initialize_all
