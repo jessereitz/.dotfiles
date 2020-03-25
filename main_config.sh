@@ -36,13 +36,16 @@ alias py3="python3"
 alias pip="pip3"
 alias cod="code"  # I'm bad at spelling
 alias gti="git"
-alias isodate="date --iso-8601=seconds"
 
 if [ $OS_ENV == "Linux" ]; then
     # I really like some of Mac's built in utilities
     alias open="xdg-open"  # Open the given directory in file manager
     alias pbcopy="xclip -selection clipboard"  # pipe input to the clipboard
     alias pbpaste="xclip -selection clipboard -o"  # pip input from the clipboard
+    alias isodate="date --iso-8601=seconds"
+else
+    # Mac is dumb and doesn't include stuff...
+    alias isodate="date +%Y-%m-%dT%H:%M:%S%z"
 fi
 
 
