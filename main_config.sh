@@ -36,7 +36,7 @@ alias py3="python3"
 alias pip="pip3"
 alias cod="code"  # I'm bad at spelling
 alias gti="git"
-alias fnd="find . -name ${1}"
+alias isodate="date --iso-8601=seconds"
 
 if [ $OS_ENV == "Linux" ]; then
     # I really like some of Mac's built in utilities
@@ -138,6 +138,16 @@ function gitter {
     git co $TARGET_BRANCH &&
     git pull &&
     git br -d $current_branch
+}
+
+function vbox-ip() {
+    # List all IP addresses of running VirtualBox VMs -> https://superuser.com/a/1530741
+    for VM in $(VBoxManage list runningvms | awk -F\{ '{print $2}' | sed -e 's/}//g');
+    do {
+        VMNAME="$(VBoxManage showvminfo ${VM} --machinereadable | awk -F\= '/^name/{print $2}')"
+        VMIP=$(VBoxManage guestproperty get ${VM} "/VirtualBox/GuestInfo/Net/0/V4/IP" | sed -e 's/Value: //g')
+        printf "VM-IP: %-16s VM-Name: %-50s\n" "${VMIP}" "${VMNAME}"
+    } done
 }
 
 ######################################################################
