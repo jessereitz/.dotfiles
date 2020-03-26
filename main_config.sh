@@ -153,6 +153,18 @@ function vbox-ip() {
     } done
 }
 
+function newvenv() {
+    venv_name=$1
+
+    if [ -z $venv_name ]; then
+        venv_name=.env
+    fi
+
+    echo "creating virtual environment: ${venv_name}"
+    virtualenv -p python3 $venv_name &&
+    source ./$venv_name/bin/activate
+}
+
 ######################################################################
 # Colors and Prompt: a more palatable command line
 ######################################################################
