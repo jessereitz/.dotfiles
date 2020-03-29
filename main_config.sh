@@ -36,6 +36,7 @@ alias py3="python3"
 alias pip="pip3"
 alias cod="code"  # I'm bad at spelling
 alias gti="git"
+alias fnd="find ./ -name $1"
 
 if [ $OS_ENV == "Linux" ]; then
     # I really like some of Mac's built in utilities
