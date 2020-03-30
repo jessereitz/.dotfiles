@@ -124,18 +124,12 @@ function shrug() {
 
 function gitter {
     # Clean up after a PR merge -> pull changes, switch to target branch, delete current branch
-    TARGET_BRANCH=dev
-    for ARGUMENT in "$@"; do
-        KEY=$(echo $ARGUMENT | cut -f1 -d=)
-        VALUE=$(echo $ARGUMENT | cut -f2 -d=)
+    TARGET_BRANCH=$1
 
-        case "$KEY" in
-            --branch|-b)
-                TARGET_BRANCH=$VALUE
-                ;;
-            *)
-        esac
-    done
+    if [ -z $TARGET_BRANCH ]; then
+        TARGET_BRANCH=dev
+    fi
+
     current_branch=`git rev-parse --abbrev-ref HEAD`
 
     echo "Pull recent changes to master, deleting current branch ${current_branch}"
