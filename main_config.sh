@@ -160,6 +160,22 @@ function newvenv() {
     source ./$venv_name/bin/activate
 }
 
+function pretest() {
+    local target_dir=$1
+
+    if [ -z $target_dir ]; then
+        target_dir=.
+    fi
+
+    ag "print\(" $target_dir && echo "FAIL: remove print statements" && return 1
+    ag "console.log" $target_dir && echo "FAIL: remove console log statements" && return 1
+}
+
+function runtest() {
+    pretest &&
+    ./test.sh $@
+}
+
 ######################################################################
 # Colors and Prompt: a more palatable command line
 ######################################################################
