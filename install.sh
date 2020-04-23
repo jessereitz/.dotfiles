@@ -78,8 +78,9 @@ function install_prereqs {
 }
 
 
+install_prereqs &&
 if [ $COMPLETE_INSTALL = true ]; then
-    install_brew_and_packages
+    install_brew_and_packages &&
     install_dotfiles -h
 else
     install_dotfiles
