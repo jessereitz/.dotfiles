@@ -34,6 +34,7 @@ function install_dotfiles {
         Darwin*)    config_file=~/.bash_profile;;
         *)          echo "unkown OS" && exit;;
     esac &&
+    echo $unameOut
 
     use_hub=$1
     if [ $use_hub ]; then
@@ -44,6 +45,7 @@ function install_dotfiles {
         echo "Using git with https"
         git clone $dotfiles_repo $dotfiles_dir
     fi
+    echo $config_file
     echo "source $HOME/.dotfiles/main_config.sh" >> $config_file &&
     source $config_file &&
     initialize_all

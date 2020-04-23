@@ -37,3 +37,9 @@ echo "source $HOME/.dotfiles/main_config.sh" >> $config_file &&
 source $config_file &&
 initialize_all
 ```
+
+#### New Way:
+```
+curl https://raw.githubusercontent.com/jessereitz/.dotfiles/install-updates-and-brew/install.sh -o /tmp/install.sh &&
+bash -i /tmp/install.sh
+```
