@@ -162,7 +162,7 @@ function newvenv() {
     source ./$venv_name/bin/activate
 }
 
-function git-open() {
+function gopen() {
     $BASH_CONFIG/third_party/git-open.sh $@
 }
 
