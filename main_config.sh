@@ -23,6 +23,7 @@ esac
 export OS_ENV=$OS_ENV
 export BASH_CONFIG="${HOME}/.dotfiles"
 export BREWFILE_GIST_ID="a6f0c8ccc0741b224a64c14368a9b92c"
+export BREWFILE=/tmp/Brewfile
 
 ######################################################################
 # Aliases: A simple affair
@@ -170,6 +171,32 @@ function gopen() {
     $BASH_CONFIG/third_party/git-open.sh $@
 }
 
+function brewit {
+    brew $@
+    brew-upload-file
+}
+
+function brew-sync {
+    echo "Syncing brew packages..."
+    brew-get-file
+    echo "Installing packages..."
+    brew bundle --file $BREWFILE
+    echo "Done"
+}
+
+function brew-get-file {
+    echo "Downloading Brewfile from gist ${BREWFILE_GIST_ID}..."
+    hub gist show $BREWFILE_GIST_ID > $BREWFILE
+    echo "Brewfile downloaded to ${BREWFILE}."
+}
+
+function brew-upload-file {
+    echo "Updating sync Brewfile..."
+    brew bundle dump --force --file /tmp/Brewfile &&
+    $BASH_CONFIG/scripts/gist_from_file.py | hub api -X PATCH --flat --input - /gists/$BREWFILE_GIST_ID > /dev/null
+    echo "Done."
+}
+
 ######################################################################
 # Colors and Prompt: a more palatable command line
 ######################################################################
@@ -220,12 +247,6 @@ function gitconfig {
     echo "Copying global gitignore"
     cp $BASH_CONFIG/.gitignore_global ~/.gitignore_global
     echo "Done copying global gitconfig"
-}
-
-function install {
-    brew $@ &&
-    brew bundle dump --force --file $BASH_CONFIG/Brewfile &&
-    git add $BASH_CONFIG/Brewfile
 }
 
 function install_brew {
