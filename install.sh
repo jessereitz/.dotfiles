@@ -39,10 +39,10 @@ function install_dotfiles {
     if [ $use_hub ]; then
         echo "Using hub"
         git config --global hub.protocol https
-        hub clone $dotfiles_repo $dotfiles_dir &&
+        hub clone $dotfiles_repo $dotfiles_dir
     else
         echo "Using git with https"
-        git clone $dotfiles_repo $dotfiles_dir &&
+        git clone $dotfiles_repo $dotfiles_dir
     fi
     echo "source $HOME/.dotfiles/main_config.sh" >> $config_file &&
     source $config_file &&
@@ -63,6 +63,11 @@ function install_everything {
     homebrew_exec=$homebrew_prefix/bin/brew
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" &&
     curl -o /tmp/Brewfile https://gist.githubusercontent.com/jessereitz/a6f0c8ccc0741b224a64c14368a9b92c/raw/ &&
+    test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
+    test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+    test -r ~/.bash_profile && echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.bashrc
+    echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.bashrc
+
     brew bundle --file /tmp/Brewfile &&
     install_dotfiles -h
 }
