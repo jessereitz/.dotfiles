@@ -22,6 +22,7 @@ case "${unameOut}" in
 esac
 export OS_ENV=$OS_ENV
 export BASH_CONFIG="${HOME}/.dotfiles"
+export BREWFILE_GIST_ID="a6f0c8ccc0741b224a64c14368a9b92c"
 
 ######################################################################
 # Aliases: A simple affair
