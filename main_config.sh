@@ -46,9 +46,12 @@ if [ $OS_ENV == "Linux" ]; then
     alias pbcopy="xclip -selection clipboard"  # pipe input to the clipboard
     alias pbpaste="xclip -selection clipboard -o"  # pip input from the clipboard
     alias isodate="date --iso-8601=seconds"
+
+    alias brew="/home/linuxbrew/.linuxbrew/bin/brew"
 else
     # Mac is dumb and doesn't include stuff...
     alias isodate="date +%Y-%m-%dT%H:%M:%S%z"
+    alias brew="/usr/local/bin/brew"
 fi
 
 
@@ -217,6 +220,25 @@ function gitconfig {
     cp $BASH_CONFIG/.gitignore_global ~/.gitignore_global
     echo "Done copying global gitconfig"
 }
+
+function install {
+    brew $@ &&
+    brew bundle dump --force --file $BASH_CONFIG/Brewfile &&
+    git add $BASH_CONFIG/Brewfile
+}
+
+function install_brew {
+    if [ $OS_ENV == "Linux" ]; then
+        sudo apt-get install build-essential -y
+        homebrew_prefix=/home/linuxbrew/.linuxbrew
+    else
+        homebrew_prefix=/usr/local
+    fi
+    homebrew_exec=$homebrew_prefix/bin/brew
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" &&
+    brew bundle --file $BASH_CONFIG/Brewfile
+}
+
 
 function setup_vim {
     if [ -d ~/.vim ]; then
