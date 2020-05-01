@@ -130,17 +130,23 @@ function shrug() {
 function gitter {
     # Clean up after a PR merge -> pull changes, switch to target branch, delete current branch
     TARGET_BRANCH=$1
+    CURRENT_BRANCH=`git rev-parse --abbrev-ref HEAD`
+
+    echo "Target branch: ${TARGET_BRANCH}; Current branch: ${CURRENT_BRANCH}"
 
     if [ -z $TARGET_BRANCH ]; then
-        TARGET_BRANCH=dev
+        TARGET_BRANCH=$(git remote show origin | grep "HEAD branch" | cut -d ":" -f 2)
     fi
 
-    current_branch=`git rev-parse --abbrev-ref HEAD`
+    if [ $TARGET_BRANCH = $CURRENT_BRANCH ]; then
+        echo "Current branch ${CURRENT_BRANCH} is the same as target ${TARGET_BRANCH}. Exiting."
+        return 1
+    fi
 
-    echo "Pull recent changes to master, deleting current branch ${current_branch}"
+    echo "Pull recent changes to ${TARGET_BRANCH}, deleting current branch ${CURRENT_BRANCH}"
     git co $TARGET_BRANCH &&
     git pull &&
-    git br -d $current_branch
+    git br -d $CURRENT_BRANCH
 }
 
 function vbox-ip() {
@@ -219,12 +225,6 @@ function gitconfig {
     echo "Copying global gitignore"
     cp $BASH_CONFIG/.gitignore_global ~/.gitignore_global
     echo "Done copying global gitconfig"
-}
-
-function install {
-    brew $@ &&
-    brew bundle dump --force --file $BASH_CONFIG/Brewfile &&
-    git add $BASH_CONFIG/Brewfile
 }
 
 function install_brew {
