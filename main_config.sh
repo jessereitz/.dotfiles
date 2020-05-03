@@ -12,6 +12,7 @@
 # Global Variables: Some convenient settings and values
 ######################################################################
 export PYTHONDONTWRITEBYTECODE=1  # bye-bye __pycache__
+export EDITOR=vim
 
 # Determine which OS we're using -> useful for same aliases on different machines
 unameOut="$(uname -s)"
