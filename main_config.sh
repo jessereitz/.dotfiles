@@ -150,6 +150,11 @@ function gitter {
     git br -d $CURRENT_BRANCH
 }
 
+function pullit {
+    git push -u origin HEAD &&
+    prettypull
+}
+
 function vbox-ip() {
     # List all IP addresses of running VirtualBox VMs -> https://superuser.com/a/1530741
     for VM in $(VBoxManage list runningvms | awk -F\{ '{print $2}' | sed -e 's/}//g');
