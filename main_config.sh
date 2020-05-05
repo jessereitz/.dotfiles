@@ -133,12 +133,12 @@ function gitter {
     TARGET_BRANCH=$1
     CURRENT_BRANCH=`git rev-parse --abbrev-ref HEAD`
 
-    echo "Target branch: ${TARGET_BRANCH}; Current branch: ${CURRENT_BRANCH}"
 
     if [ -z $TARGET_BRANCH ]; then
         TARGET_BRANCH=$(git remote show origin | grep "HEAD branch" | cut -d ":" -f 2)
     fi
 
+    echo "Target branch: ${TARGET_BRANCH}; Current branch: ${CURRENT_BRANCH}"
     if [ $TARGET_BRANCH = $CURRENT_BRANCH ]; then
         echo "Current branch ${CURRENT_BRANCH} is the same as target ${TARGET_BRANCH}. Exiting."
         return 1
