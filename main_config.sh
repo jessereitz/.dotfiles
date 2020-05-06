@@ -1,11 +1,11 @@
 #!/bin/sh
 ######################################################################
-# Jesse R's Bash Profile:
+# Jesse R's Shell Profile:
 #
 # Some settings I like. I only use MacOS and Ubuntu-derivatives so
 # this is tailor-made for that.
 #
-#     https://github.com/jessereitz/mac_bash
+#     https://github.com/jessereitz/.dotfiles
 #
 ######################################################################
 
@@ -245,37 +245,6 @@ bash_prompt() {
 }
 
 PROMPT_COMMAND=bash_prompt
-
-
-######################################################################
-# Initial Configuration: set some stuff up
-######################################################################
-gitconfig() {
-    echo "Copying global gitconfig"
-    cat"$BASH_CONFIG"/.gitconfig >> ~/.gitconfig
-    echo "Copying global gitignore"
-    cp "$BASH_CONFIG"/.gitignore_global ~/.gitignore_global
-    echo "Done copying global gitconfig"
-}
-
-setup_vim() {
-    if [ -d ~/.vim ]; then
-        echo "Removing old vim config"
-        rm -rf ~/.vim
-    fi
-    echo "Initializing vim"
-    cp -r "$BASH_CONFIG"/.vim ~/.vim
-    echo "Installing vim plugins"
-    vim +PlugInstall +qall
-    echo "Done initializing vim"
-}
-
-initialize_all() {
-    echo "Initializing bash and vim settings"
-    gitconfig
-    setup_vim
-    echo "Done."
-}
 
 ######################################################################
 # Third Party Scripts: some people just do it better
