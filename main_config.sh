@@ -1,3 +1,4 @@
+#!/bin/sh
 ######################################################################
 # Jesse R's Bash Profile:
 #
@@ -27,21 +28,20 @@ export BASH_CONFIG="${HOME}/.dotfiles"
 ######################################################################
 # Aliases: A simple affair
 ######################################################################
-alias ll="ls -lah -G"
-alias l="ls -G"
-alias less="less -R"
-alias ccat="source-highlight --out-format=esc256 -o STDOUT -i"
-alias exe="chmod +x $1"
-alias getip="curl icanhazip.com"
-alias py="python"
-alias py3="python3"
-alias pip="pip3"
-alias cod="code"  # I'm bad at spelling
-alias gti="git"
-alias fnd="find ./ -name $1"
-alias chrome="google-chrome"
+alias ll='ls -lah -G'
+alias l='ls -G'
+alias less='less -R'
+alias ccat='source-highlight --out-format=esc256 -o STDOUT -i'
+alias getip='curl icanhazip.com'
+alias py='python'
+alias py3='python3'
+alias pip='pip3'
+alias cod='code'  # I'm bad at spelling
+alias gti='git'
+alias chrome='google-chrome'
+alias gopen="hub browse"
 
-if [ $OS_ENV == "Linux" ]; then
+if [ "$OS_ENV" = "Linux" ]; then
     # I really like some of Mac's built in utilities
     alias open="xdg-open"  # Open the given directory in file manager
     alias pbcopy="xclip -selection clipboard"  # pipe input to the clipboard
@@ -61,8 +61,8 @@ fi
 ######################################################################
 
 # Backup/Restore Gnome terminal
-function terminal() {
-    if [ ! $OS_ENV == "Linux" ]; then
+terminal() {
+    if [ ! "$OS_ENV" = "Linux" ]; then
         echo "This isn't Linux. Don't even try."
         return
     fi
@@ -83,13 +83,13 @@ function terminal() {
 
     if [ $action = "backup" ]; then
         echo "Saving Gnome terminal settings to ${settings_file}"
-        dconf dump /org/gnome/terminal/ > $settings_file
+        dconf dump /org/gnome/terminal/ > "$settings_file"
         echo "Done."
     fi
 
     if [ $action = "load" ]; then
         custom_settings_file=$2
-        if [ -z $custom_settings_file ]; then
+        if [ -z "$custom_settings_file" ]; then
             echo "No settings file provided. Using default $settings_file"
         else
             settings_file=$custom_settings_file
@@ -99,86 +99,87 @@ function terminal() {
         dconf reset -f /org/gnome/terminal/
 
         echo "Loading custom settings."
-        dconf load /org/gnome/terminal/ < $settings_file
+        dconf load /org/gnome/terminal/ < "$settings_file"
     fi
 }
 
-function flushdns() {
-    if [ ! $OS_ENV == "Linux" ]; then
+flushdns() {
+    if [ "$OS_ENV" = "Darwin" ]; then
         sudo killall -HUP mDNSResponder
         return
     fi
     sudo systemd-resolve --flush-caches
 }
 
-function up() {
+up() {
     # Go up a number of directories while preserving directory history
     # EG. `up 3 => cd ../../../.`
     target_path='.'
     times=$1
     while [ "$times" -gt 0 ]; do
         target_path="../${target_path}"
-        times=$(($times -1))
+        times=$((times -1))
     done
-    cd $target_path
+    cd $target_path || return
 }
 
-function shrug() {
+shrug() {
     echo "¯\_(ツ)_/¯"
     echo "¯\_(ツ)_/¯" | pbcopy
 }
 
-function gitter {
+gitter() {
     # Clean up after a PR merge -> pull changes, switch to target branch, delete current branch
     TARGET_BRANCH=$1
-    CURRENT_BRANCH=`git rev-parse --abbrev-ref HEAD`
+    CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
 
-    if [ -z $TARGET_BRANCH ]; then
+    if [ -z "$TARGET_BRANCH" ]; then
         TARGET_BRANCH=$(git remote show origin | grep "HEAD branch" | cut -d ":" -f 2)
     fi
 
     echo "Target branch: ${TARGET_BRANCH}; Current branch: ${CURRENT_BRANCH}"
-    if [ $TARGET_BRANCH = $CURRENT_BRANCH ]; then
+    if [ "$TARGET_BRANCH" = "$CURRENT_BRANCH" ]; then
         echo "Current branch ${CURRENT_BRANCH} is the same as target ${TARGET_BRANCH}. Exiting."
         return 1
     fi
 
     echo "Pull recent changes to ${TARGET_BRANCH}, deleting current branch ${CURRENT_BRANCH}"
-    git co $TARGET_BRANCH &&
+    git co "$TARGET_BRANCH" &&
     git pull &&
-    git br -d $CURRENT_BRANCH
+    git br -d "$CURRENT_BRANCH"
 }
 
-function pullit {
+pullit() {
     git push -u origin HEAD &&
     prettypull
 }
 
-function vbox-ip() {
+vboxip() {
     # List all IP addresses of running VirtualBox VMs -> https://superuser.com/a/1530741
     for VM in $(VBoxManage list runningvms | awk -F\{ '{print $2}' | sed -e 's/}//g');
     do {
-        VMNAME="$(VBoxManage showvminfo ${VM} --machinereadable | awk -F\= '/^name/{print $2}')"
-        VMIP=$(VBoxManage guestproperty get ${VM} "/VirtualBox/GuestInfo/Net/0/V4/IP" | sed -e 's/Value: //g')
-        printf "VM-IP: %-16s VM-Name: %-50s\n" "${VMIP}" "${VMNAME}"
+        VMNAME="$(VBoxManage showvminfo "$VM" --machinereadable | awk -F= '/^name/{print $2}')"
+        VMIP=$(VBoxManage guestproperty get "$VM" "/VirtualBox/GuestInfo/Net/0/V4/IP" | sed -e 's/Value: //g')
+        printf "VM-IP: %-16s VM-Name: %-50s\n" "$VMIP" "$VMNAME"
     } done
 }
 
-function newvenv() {
+newvenv() {
     venv_name=$1
 
-    if [ -z $venv_name ]; then
+    if [ -z "$venv_name" ]; then
         venv_name=.env
     fi
 
-    echo "creating virtual environment: ${venv_name}"
-    virtualenv -p python3 $venv_name &&
-    source ./$venv_name/bin/activate
+    echo "creating virtual environment: $venv_name"
+    virtualenv -p python3 "$venv_name" || echo "failed to created virtualenv"; return 1
+    # shellcheck source=/dev/null
+    . "./$venv_name/bin/activate"
 }
 
-function gopen() {
-    $BASH_CONFIG/third_party/git-open.sh $@
+fnd() {
+    find ./ -name "$1"
 }
 
 ######################################################################
@@ -187,34 +188,58 @@ function gopen() {
 export CLICOLOR=1
 export LSCOLORS=ExFxBxDxCxegedabagacad
 
-Red='\[\e[0;31m\]'; BRed='\[\e[1;91m\]'
-Gre='\[\e[0;32m\]'; BGre='\[\e[1;92m\]'
-Yel='\[\e[0;33m\]'; BYel='\[\e[1;93m\]'
-Blu='\[\e[0;34m\]'; BBlu='\[\e[1;94m\]'
-Mag='\[\e[0;35m\]'; BMag='\[\e[1;95m\]'
-Cya='\[\e[0;36m\]'; BCya='\[\e[1;96m\]'
-Whi='\[\e[0;37m\]'; BWhi='\[\e[1;97m\]'
+# SC2034 -> unused var
+# I don't care if these are unused, I want them around
+# shellcheck disable=SC2034
+Red='\[\e[0;31m\]'
+# shellcheck disable=SC2034
+BRed='\[\e[1;91m\]'
+# shellcheck disable=SC2034
+Gre='\[\e[0;32m\]'
+# shellcheck disable=SC2034
+BGre='\[\e[1;92m\]'
+# shellcheck disable=SC2034
+Yel='\[\e[0;33m\]'
+# shellcheck disable=SC2034
+BYel='\[\e[1;93m\]'
+# shellcheck disable=SC2034
+Blu='\[\e[0;34m\]'
+# shellcheck disable=SC2034
+BBlu='\[\e[1;94m\]'
+# shellcheck disable=SC2034
+Mag='\[\e[0;35m\]'
+# shellcheck disable=SC2034
+BMag='\[\e[1;95m\]'
+# shellcheck disable=SC2034
+Cya='\[\e[0;36m\]'
+# shellcheck disable=SC2034
+BCya='\[\e[1;96m\]'
+# shellcheck disable=SC2034
+Whi='\[\e[0;37m\]'
+# shellcheck disable=SC2034
+BWhi='\[\e[1;97m\]'
+# shellcheck disable=SC2034
 None='\[\e[0m\]'
 
 
 # Set up my bash prompt with py virtualenv and some git info
-function set_virtualenv () {
+set_virtualenv () {
     if test -z "$VIRTUAL_ENV" ; then
         PYTHON_VIRTUALENV=""
     else
-        PYTHON_VIRTUALENV="$None[$Mag`basename \"$VIRTUAL_ENV\"`$None] "
+        PYTHON_VIRTUALENV="${None}[$Mag$(basename \""$VIRTUAL_ENV")$None] "
     fi
 }
 
 bash_prompt() {
     set_virtualenv
-    if [ -z $DISPLAY_HOSTNAME ]; then
-        DISPLAY_HOSTNAME=`hostname`
+    if [ -z "$DISPLAY_HOSTNAME" ]; then
+        DISPLAY_HOSTNAME=$(hostname)
     fi
-    local GIT_PS1_SHOWDIRTYSTATE=True
-    local GIT_PS1_SHOWSTASHSTATE=True
-    local GIT_PS1_SHOWCOLORHINTS=True
-    local GIT_PS1_SHOWUNTRACKEDFILES=True
+    export GIT_PS1_SHOWDIRTYSTATE=True
+    export GIT_PS1_SHOWSTASHSTATE=True
+    export GIT_PS1_SHOWCOLORHINTS=True
+    export GIT_PS1_SHOWUNTRACKEDFILES=True
 
     __git_ps1 "$PYTHON_VIRTUALENV$Cya\u$None@$Gre$DISPLAY_HOSTNAME:$Yel\w$None" "$None$ "
 }
@@ -225,40 +250,27 @@ PROMPT_COMMAND=bash_prompt
 ######################################################################
 # Initial Configuration: set some stuff up
 ######################################################################
-function gitconfig {
+gitconfig() {
     echo "Copying global gitconfig"
-    cat $BASH_CONFIG/.gitconfig >> ~/.gitconfig
+    cat"$BASH_CONFIG"/.gitconfig >> ~/.gitconfig
     echo "Copying global gitignore"
-    cp $BASH_CONFIG/.gitignore_global ~/.gitignore_global
+    cp "$BASH_CONFIG"/.gitignore_global ~/.gitignore_global
     echo "Done copying global gitconfig"
 }
 
-function install_brew {
-    if [ $OS_ENV == "Linux" ]; then
-        sudo apt-get install build-essential -y
-        homebrew_prefix=/home/linuxbrew/.linuxbrew
-    else
-        homebrew_prefix=/usr/local
-    fi
-    homebrew_exec=$homebrew_prefix/bin/brew
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" &&
-    brew bundle --file $BASH_CONFIG/Brewfile
-}
-
-
-function setup_vim {
+setup_vim() {
     if [ -d ~/.vim ]; then
         echo "Removing old vim config"
         rm -rf ~/.vim
     fi
     echo "Initializing vim"
-    cp -r $BASH_CONFIG/.vim ~/.vim
+    cp -r "$BASH_CONFIG"/.vim ~/.vim
     echo "Installing vim plugins"
     vim +PlugInstall +qall
     echo "Done initializing vim"
 }
 
-function initialize_all {
+initialize_all() {
     echo "Initializing bash and vim settings"
     gitconfig
     setup_vim
@@ -268,10 +280,12 @@ function initialize_all {
 ######################################################################
 # Third Party Scripts: some people just do it better
 ######################################################################
-if [ -f $BASH_CONFIG/third_party/git-completion.bash ]; then
-    . $BASH_CONFIG/third_party/git-completion.bash
+if [ -f "$BASH_CONFIG"/third_party/git-completion.bash ]; then
+    # shellcheck source=/dev/null
+    . "$BASH_CONFIG"/third_party/git-completion.bash
 fi
 
-if [ -f $BASH_CONFIG/third_party/git-prompt.sh ]; then
-    . $BASH_CONFIG/third_party/git-prompt.sh
+if [ -f "$BASH_CONFIG"/third_party/git-prompt.sh ]; then
+    # shellcheck source=/dev/null
+    . "$BASH_CONFIG"/third_party/git-prompt.sh
 fi
