@@ -150,8 +150,12 @@ gitter() {
     git br -d "$CURRENT_BRANCH"
 }
 
+pushit() {
+    git push -u origin HEAD
+}
+
 pullit() {
-    git push -u origin HEAD &&
+    pushit &&
     prettypull
 }
 
