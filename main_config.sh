@@ -18,12 +18,21 @@ export EDITOR=vim
 # Determine which OS we're using -> useful for same aliases on different machines
 unameOut="$(uname -s)"
 case "${unameOut}" in
-    Linux*)     OS_ENV=Linux;;
-    Darwin*)    OS_ENV=Mac;;
-    *)          OS_ENV="UNKNOWN:${unameOut}";;
+    Linux*)
+        OS_ENV=Linux
+        _config_file=.bashrc
+        ;;
+    Darwin*)
+        OS_ENV=Mac
+        _config_file=.bash_profile
+        ;;
+    *)
+        OS_ENV="UNKNOWN:${unameOut}"
+        ;;
 esac
 export OS_ENV=$OS_ENV
-export BASH_CONFIG="${HOME}/.dotfiles"
+export BASH_CONFIG="$HOME/.dotfiles"
+export CONFIG_FILE="$HOME/$_config_file"
 
 ######################################################################
 # Aliases: A simple affair
@@ -38,8 +47,8 @@ alias py3='python3'
 alias pip='pip3'
 alias cod='code'  # I'm bad at spelling
 alias gti='git'
-alias chrome='google-chrome'
 alias gopen="hub browse"
+alias resource='. $CONFIG_FILE'
 
 if [ "$OS_ENV" = "Linux" ]; then
     # I really like some of Mac's built in utilities
@@ -47,12 +56,14 @@ if [ "$OS_ENV" = "Linux" ]; then
     alias pbcopy="xclip -selection clipboard"  # pipe input to the clipboard
     alias pbpaste="xclip -selection clipboard -o"  # pip input from the clipboard
     alias isodate="date --iso-8601=seconds"
+    alias chrome='google-chrome'
 
     alias brew="/home/linuxbrew/.linuxbrew/bin/brew"
 else
     # Mac is dumb and doesn't include stuff...
     alias isodate="date +%Y-%m-%dT%H:%M:%S%z"
     alias brew="/usr/local/bin/brew"
+    alias chrome="open -a Google\ Chrome --args"
 fi
 
 
@@ -131,11 +142,11 @@ shrug() {
 gitter() {
     # Clean up after a PR merge -> pull changes, switch to target branch, delete current branch
     TARGET_BRANCH=$1
-    CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+    CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD | awk '{$1=$1;print}')
 
 
     if [ -z "$TARGET_BRANCH" ]; then
-        TARGET_BRANCH=$(git remote show origin | grep "HEAD branch" | cut -d ":" -f 2)
+        TARGET_BRANCH=$(git remote show origin | grep "HEAD branch" | cut -d ":" -f 2 | awk '{$1=$1;print}')
     fi
 
     echo "Target branch: ${TARGET_BRANCH}; Current branch: ${CURRENT_BRANCH}"
@@ -184,6 +195,16 @@ newvenv() {
 
 fnd() {
     find ./ -name "$1"
+}
+
+dockerkillall() {
+    echo "Killing all running docker containers"
+    for ctn_id in $(docker ps -q);
+    do {
+        echo "killing $ctn_id"
+        docker kill "$ctn_id"
+    } done;
+    echo "All running containers killed"
 }
 
 ######################################################################
