@@ -8,8 +8,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: shellcheck
-        uses: reviewdog/action-shellcheck@v1
+        uses: azohra/shell-linter@v0.3.0
         with:
-          path: '.'
-          pattern: '*.sh'
-          exclude: './.git/*'
+          path: '*.sh'
