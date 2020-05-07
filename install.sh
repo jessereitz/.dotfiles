@@ -83,7 +83,7 @@ source_config() {
     echo "👍 Done."
 
     echo "⛲️ Sourcing config file $config_file for current shell"
-    # shellcheck source=/dev/null
+    # notshellcheck source=/dev/null
     . "$config_file"
     echo "👍 Done."
 }
