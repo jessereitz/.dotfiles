@@ -1,17 +1,17 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 #########################################################################
-# Install Docker on Ubuntu 18.04
-# 
-# This is a shameless copy/condensation of the official instructions 
+# Install Docker on Ubuntu 18.04 (and up?)
+#
+# This is a shameless copy/condensation of the official instructions
 # from docker's website. I just wanted a quick script to run to install
 # it though.
-# 
+#
 # Se https://docs.docker.com/install/linux/docker-ce/ubuntu/
 #########################################################################
 
 echo "#####################################"
-echo -e "\n          It's Docker Time          \n"
+printf "\n          It's Docker Time          \n\n"
 echo "#####################################"
 
 # Update the apt package index
@@ -25,7 +25,7 @@ sudo apt-get install -y \
     curl \
     gnupg-agent \
     software-properties-common
-    
+
 # Get Docker's GPG key
 echo "Getting Docker's GPG key"
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
@@ -55,8 +55,8 @@ echo "Did it work?"
 sudo docker run hello-world
 echo "It did!"
 
-echo "Adding the current user ${$USER} to the group: docker"
-sudo usermod -aG docker $USER
+echo "Adding the current user $USER to the group: docker"
+sudo usermod -aG docker "$USER"
 echo "Done."
 
 echo "Installing docker-compose"
