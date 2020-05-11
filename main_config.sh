@@ -23,7 +23,7 @@ case "${unameOut}" in
         _config_file=.bashrc
         ;;
     Darwin*)
-        OS_ENV=Mac
+        OS_ENV=Darwin
         _config_file=.bash_profile
         ;;
     *)
