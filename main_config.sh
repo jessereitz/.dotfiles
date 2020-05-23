@@ -120,6 +120,7 @@ flushdns() {
         return
     fi
     sudo systemd-resolve --flush-caches
+    sudo systemctl restart systemd-resolved.service
 }
 
 up() {
