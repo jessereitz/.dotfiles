@@ -189,7 +189,7 @@ newvenv() {
     fi
 
     echo "creating virtual environment: $venv_name"
-    virtualenv -p python3 "$venv_name" || echo "failed to created virtualenv"; return 1
+    virtualenv -p python3 "$venv_name" || { echo "failed to created virtualenv"; return 1; }
     # shellcheck source=/dev/null
     . "./$venv_name/bin/activate"
 }
