@@ -126,7 +126,7 @@ up() {
     # Go up a number of directories while preserving directory history
     # EG. `up 3 => cd ../../../.`
     target_path='.'
-    times=$1
+    times=${1:-'1'}
     while [ "$times" -gt 0 ]; do
         target_path="../${target_path}"
         times=$((times -1))
