@@ -284,3 +284,5 @@ if [ -f "$BASH_CONFIG"/third_party/git-prompt.sh ]; then
     # shellcheck source=/dev/null
     . "$BASH_CONFIG"/third_party/git-prompt.sh
 fi
+
+alias git-summary="${BASH_CONFIG}/third_party/git-summary.bash"
