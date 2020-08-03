@@ -285,4 +285,4 @@ if [ -f "$BASH_CONFIG"/third_party/git-prompt.sh ]; then
     . "$BASH_CONFIG"/third_party/git-prompt.sh
 fi
 
-alias git-summary="${BASH_CONFIG}/third_party/git-summary.bash"
+alias git-summary='$BASH_CONFIG/third_party/git-summary.bash'

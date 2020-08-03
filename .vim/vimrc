@@ -23,8 +23,10 @@ filetype indent on              " Load filetype-specific indent files
 set wildmenu                    " Visual autocomplete for command menu
 set lazyredraw                  " Don't redraw screen when it's not necessary
 set showmatch                   " Highlight matching [{()}]
+set splitright
 
 set backspace=indent,eol,start  " Backspace through everything in insert mode
+inoremap <C-d> <Del>            " Delete key forward delete
 
 "" Searching
 set incsearch                   " Search as characeters are entered
@@ -78,5 +80,44 @@ Plug 'sheerun/vim-polyglot'
 " Install csv.vim
 Plug 'chrisbra/csv.vim'
 
+Plug 'ycm-core/YouCompleteMe'
+" Better go-to map
+noremap <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+
+Plug 'vim-syntastic/syntastic'
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+
+Plug 'nvie/vim-flake8'
+
+Plug 'ctrlpvim/ctrlp.vim'
+
+Plug 'tpope/vim-fugitive'
+
+Plug 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 " End vim-plug
 call plug#end()
+
+
+"" Python Configuration
+
+" python with virtualenv support
+
+python3 << EOF
+import os
+import sys
+if 'VIRTUAL_ENV' in os.environ:
+  project_base_dir = os.environ['VIRTUAL_ENV']
+  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
+  exec(open(activate_this).read(), dict(__file__=activate_this))
+EOF
+
+let python_highlight_all=1
+
