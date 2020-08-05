@@ -4,8 +4,24 @@ syntax enable                   " Enable syntax processing
 "colorscheme peachpuff           " Set colorscheme
 set t_Co=256
 set laststatus=2
+let &titlestring = expand('%:p')
 set title
+" Set the title of the Terminal to the currently open file
+function! SetTerminalTitle()
+    let titleString = expand('%:t')
+    if len(titleString) > 0
+        let &titlestring = expand('%:~')
+        " this is the format iTerm2 expects when setting the window title
+        let args = "\033];".&titlestring."\007"
+        let cmd = 'silent !echo -e "'.args.'"'
+        execute cmd
+        redraw!
+    endif
+endfunction
+
+autocmd BufEnter * call SetTerminalTitle()
 set clipboard=unnamed
+set wildignore+=*.pyc,*.o,*.obj,*.svn,*.swp,*.class,*.hg,*.DS_Store,*.min.* " Ignore some dumb files
 
 set encoding=utf-8              " Set encoding to UTF-8
 
@@ -83,19 +99,26 @@ Plug 'sheerun/vim-polyglot'
 " Install csv.vim
 Plug 'chrisbra/csv.vim'
 
-Plug 'ycm-core/YouCompleteMe'
+" Plug 'ycm-core/YouCompleteMe'
 " Better go-to map
-noremap <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+" noremap <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
-Plug 'vim-syntastic/syntastic'
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
+" Plug 'vim-syntastic/syntastic'
+" set statusline+=%#warningmsg#
+" set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%*
 
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+" let g:syntastic_always_populate_loc_list = 1
+" let g:syntastic_auto_loc_list = 1
+" let g:syntastic_check_on_open = 1
+" let g:syntastic_check_on_wq = 0
+Plug 'dense-analysis/ale'
+let g:airline#extensions#ale#enabled = 1
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_echo_msg_format = '[%linter%: %code%] %s [%severity%]'
+
+
 
 
 Plug 'nvie/vim-flake8'
@@ -165,3 +188,12 @@ let g:airline_symbols.paste = '∥'
 let g:airline_symbols.spell = 'Ꞩ'
 let g:airline_symbols.notexists = 'Ɇ'
 let g:airline_symbols.whitespace = 'Ξ'
+
+
+let NERDTreeRespectWildIgnore=1
+
+" Ctrl-P settings
+let g:ctrlp_show_hidden = 1
+"let g:
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
+
