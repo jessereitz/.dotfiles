@@ -185,13 +185,19 @@ newvenv() {
     venv_name=$1
 
     if [ -z "$venv_name" ]; then
-        venv_name=.env
+        venv_name=$(basename $PWD)
     fi
 
     echo "creating virtual environment: $venv_name"
-    virtualenv -p python3 "$venv_name" || { echo "failed to created virtualenv"; return 1; }
-    # shellcheck source=/dev/null
-    . "./$venv_name/bin/activate"
+
+    if command -v pyenv 1>/dev/null 2>&1; then
+        pyenv virtualenv 3.6.11 $venv_name || { echo "failed to create virtualenv"; return 1; }
+        echo $venv_name > .python-version
+    else
+        virtualenv -p python3 "$venv_name" || { echo "failed to created virtualenv"; return 1; }
+        # shellcheck source=/dev/null
+        . "./$venv_name/bin/activate"
+    fi
 }
 
 fnd() {
@@ -286,3 +292,8 @@ if [ -f "$BASH_CONFIG"/third_party/git-prompt.sh ]; then
 fi
 
 alias git-summary='$BASH_CONFIG/third_party/git-summary.bash'
+
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+  eval "$(pyenv virtualenv-init -)"
+fi

@@ -1,6 +1,7 @@
 " vimrc
 set nocompatible                " No vi legacy
 syntax enable                   " Enable syntax processing
+let mapleader = " "
 "colorscheme peachpuff           " Set colorscheme
 set t_Co=256
 set laststatus=2
@@ -45,7 +46,10 @@ set showmatch                   " Highlight matching [{()}]
 set splitright
 
 set backspace=indent,eol,start  " Backspace through everything in insert mode
-inoremap <C-d> <Del>            " Delete key forward delete
+" Delete key forward delete
+inoremap <C-d> <Del>            
+noremap <silent> <Leader>- :vertical resize -5<cr>
+noremap <silent> <Leader>= :vertical resize +5<cr>
 
 "" Searching
 set incsearch                   " Search as characeters are entered
@@ -60,7 +64,7 @@ set foldenable                  " Enable folding
 set foldlevelstart=10           " Open most folds by default
 set foldnestmax=10              " 10 nested fold max
 " Space open/closes folds
-nnoremap <space> za
+nnoremap <Leader>f za
 set foldmethod=indent           " Fold based on indent level
 
 "" Custom Movement Stuff
@@ -117,6 +121,8 @@ let g:airline#extensions#ale#enabled = 1
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%: %code%] %s [%severity%]'
+let g:ale_linters = {'python': ['flake8']}
+"let g:ale_python_flake8_options = "--inline-quotes=\' --multiline-quotes=\'\'\' --import-order-style=smarkets --ignore=E309,E501,E301,I202 --application-import-names=mackerel,tests"
 
 
 
