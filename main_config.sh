@@ -9,6 +9,9 @@
 #
 ######################################################################
 
+# Get those sweet sweet vi bindings
+set -o vi
+
 ######################################################################
 # Global Variables: Some convenient settings and values
 ######################################################################
@@ -185,14 +188,14 @@ newvenv() {
     venv_name=$1
 
     if [ -z "$venv_name" ]; then
-        venv_name=$(basename $PWD)
+        venv_name=$(basename "$PWD")
     fi
 
     echo "creating virtual environment: $venv_name"
 
     if command -v pyenv 1>/dev/null 2>&1; then
-        pyenv virtualenv 3.6.11 $venv_name || { echo "failed to create virtualenv"; return 1; }
-        echo $venv_name > .python-version
+        pyenv virtualenv 3.6.11 "$venv_name" || { echo "failed to create virtualenv"; return 1; }
+        echo "$venv_name" > .python-version
     else
         virtualenv -p python3 "$venv_name" || { echo "failed to created virtualenv"; return 1; }
         # shellcheck source=/dev/null
