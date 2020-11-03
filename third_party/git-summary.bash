@@ -99,7 +99,7 @@ git_summary() {
     local max_repo_len=$(max_len "$repos")
     local max_branch_len=$(max_len "$branches")
     local template=$(printf "%%b%%-%ds  %%-%ds  %%-5s" $max_repo_len $max_branch_len)
-    print_header "$template" $max_repo_len $max_branch_len
+    # print_header "$template" $max_repo_len $max_branch_len
 
     local repo_count=0
 
