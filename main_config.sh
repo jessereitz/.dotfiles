@@ -14,6 +14,8 @@
 ######################################################################
 export PYTHONDONTWRITEBYTECODE=1  # bye-bye __pycache__
 export EDITOR=vim
+export HISTSIZE=20000
+export HISTFILESIZE=20000
 
 # Determine which OS we're using -> useful for same aliases on different machines
 unameOut="$(uname -s)"
@@ -291,7 +293,7 @@ if [ -f "$BASH_CONFIG"/third_party/git-prompt.sh ]; then
     . "$BASH_CONFIG"/third_party/git-prompt.sh
 fi
 
-alias git-summary='$BASH_CONFIG/third_party/git-summary.bash'
+alias git-summary='$BASH_CONFIG/third_party/git-summary.bash | sort'
 
 if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
