@@ -3,3 +3,5 @@
 **/.netrwhist
 .mypy_cache/
 **/.python-version
+.pytest_cache/
+*.env
