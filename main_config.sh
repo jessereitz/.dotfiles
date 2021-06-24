@@ -59,8 +59,6 @@ if [ "$OS_ENV" = "Linux" ]; then
     alias pbpaste="xclip -selection clipboard -o"  # pip input from the clipboard
     alias isodate="date --iso-8601=seconds"
     alias chrome='google-chrome'
-
-    alias brew="/home/linuxbrew/.linuxbrew/bin/brew"
 else
     # Mac is dumb and doesn't include stuff...
     alias isodate="date +%Y-%m-%dT%H:%M:%S%z"
@@ -139,7 +137,7 @@ up() {
 
 shrug() {
     echo "¯\_(ツ)_/¯"
-    echo "¯\_(ツ)_/¯" | pbcopy
+    printf "¯\_(ツ)_/¯" | pbcopy
 }
 
 gitter() {
@@ -299,3 +297,9 @@ if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
   eval "$(pyenv virtualenv-init -)"
 fi
+
+
+######################################################################
+# My Own Scripts
+######################################################################
+export PATH="$HOME/.dotfiles/own_scripts:$PATH"
