@@ -302,4 +302,4 @@ fi
 ######################################################################
 # My Own Scripts
 ######################################################################
-export PATH="~/.dotfiles/own_scripts:$PATH"
+export PATH="$HOME/.dotfiles/own_scripts:$PATH"
