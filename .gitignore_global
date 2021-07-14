@@ -5,3 +5,5 @@
 **/.python-version
 .pytest_cache/
 *.env
+.zcompdump*
+.zsh_history

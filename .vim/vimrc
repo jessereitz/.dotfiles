@@ -27,7 +27,7 @@ set wildignore+=*.pyc,*.o,*.obj,*.svn,*.swp,*.class,*.hg,*.DS_Store,*.min.* " Ig
 set encoding=utf-8              " Set encoding to UTF-8
 
 set mouse=a                     " Enable mouse support
-set shellcmdflag=-ic            " Use interactive shell (so I can get my aliases and whatnot)
+"set shellcmdflag=-ic            " Use interactive shell (so I can get my aliases and whatnot)
 
 "" Whitespace
 set nowrap                      " Don't wrap lines
@@ -168,7 +168,7 @@ let g:onedark_terminal_italics=1
 let g:airline_theme="onedark"
 let g:onedark_termcolors=256
 
-colorscheme onedark
+"colorscheme onedark
 hi Normal guibg=NONE ctermbg=NONE
 
 if !exists('g:airline_symbols')

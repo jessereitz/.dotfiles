@@ -23,7 +23,7 @@ HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
 # The following lines were added by compinstall
 
 zstyle ':completion:*' completer _expand _complete _ignored _correct _approximate
-zstyle :compinstall filename '/Users/jesse/.zshrc'
+zstyle :compinstall filename '/Users/${USER}/.zshrc'
 
 autoload -Uz compinit
 compinit
@@ -36,7 +36,7 @@ select-word-style bash
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/jesse/.oh-my-zsh"
+export ZSH="/Users/${USER}/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
