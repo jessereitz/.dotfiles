@@ -283,3 +283,6 @@ dockerkillall() {
     } done;
     echo "All running containers killed"
 }
+
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
