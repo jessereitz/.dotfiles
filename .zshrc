@@ -1,3 +1,12 @@
+eval $(/opt/homebrew/bin/brew shellenv)
+export PATH="/opt/homebrew/bin:$PATH"
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+
+
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init --path)"
+
 setopt NO_CASE_GLOB
 setopt AUTO_CD
 
@@ -66,7 +75,7 @@ ENABLE_CORRECTION="true"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git virtualenv)
+plugins=(git pyenv virtualenv nvm)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -78,11 +87,14 @@ function my_git_prompt_info() {
 	echo "%{$fg[white]%}(%{$fg[green]%}${ref#refs/heads/}$GIT_STATUS%{$fg[white]%})%{$reset_color%}"
 }
 
-set_virtualenv () {
-    if test -z "$VIRTUAL_ENV" ; then
-        PYTHON_VIRTUALENV=""
+virtualenv_prompt_info () {
+    empty_pyenv="pyenv: no local version configured for this directory"
+    pyenv_local=$(pyenv local 2>&1)
+    if test "$pyenv_local" = "$empty_pyenv" ; then
+        PYTHON_VIRTUALENV="";
     else
-        PYTHON_VIRTUALENV="${reset_color}[%{$fg[magenta]%}$(basename \""$VIRTUAL_ENV")${reset_color}] "
+        # PYTHON_VIRTUALENV=$pyenv_local
+        PYTHON_VIRTUALENV="${reset_color}[%{$fg[magenta]%}$(basename "$pyenv_local")${reset_color}] "
     fi
     echo $PYTHON_VIRTUALENV
 }
@@ -284,5 +296,4 @@ dockerkillall() {
     echo "All running containers killed"
 }
 
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
+export PYTHONDONTWRITEBYTECODE=1
