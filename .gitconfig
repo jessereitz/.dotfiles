@@ -10,3 +10,12 @@
     br = branch
     co = checkout
     ci = commit
+
+[pull]
+    rebase = false
+
+[init]
+	defaultBranch = main
+
+[pager]
+	branch = false

@@ -275,7 +275,7 @@ bash_prompt() {
 
     __git_ps1 "$PYTHON_VIRTUALENV$Cya\u$None@$Gre$DISPLAY_HOSTNAME:$Yel\w$None" "$None$ "
 }
-
+        
 PROMPT_COMMAND=bash_prompt
 
 ######################################################################
