@@ -8,3 +8,4 @@
 .zcompdump*
 .zsh_history
 *todo*
+**/.tours

@@ -2,11 +2,6 @@ eval $(/opt/homebrew/bin/brew shellenv)
 export PATH="/opt/homebrew/bin:$PATH"
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 
-
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init --path)"
-
 setopt NO_CASE_GLOB
 setopt AUTO_CD
 
@@ -75,7 +70,6 @@ ENABLE_CORRECTION="true"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git pyenv virtualenv nvm)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -87,18 +81,6 @@ function my_git_prompt_info() {
 	echo "%{$fg[white]%}(%{$fg[green]%}${ref#refs/heads/}$GIT_STATUS%{$fg[white]%})%{$reset_color%}"
 }
 
-virtualenv_prompt_info () {
-    empty_pyenv="pyenv: no local version configured for this directory"
-    pyenv_local=$(pyenv local 2>&1)
-    if test "$pyenv_local" = "$empty_pyenv" ; then
-        PYTHON_VIRTUALENV="";
-    else
-        # PYTHON_VIRTUALENV=$pyenv_local
-        PYTHON_VIRTUALENV="${reset_color}[%{$fg[magenta]%}$(basename "$pyenv_local")${reset_color}] "
-    fi
-    echo $PYTHON_VIRTUALENV
-}
-
 if [ -z "$DISPLAY_HOSTNAME" ]; then
     DISPLAY_HOSTNAME=$(hostname)
 fi
@@ -106,7 +88,7 @@ fi
 ZSH_THEME_NAME="%{$fg[cyan]%}%n"
 ZSH_THEME_HOST="%{$fg[green]%}$DISPLAY_HOSTNAME"
 ZSH_THEME_PWD="%{$fg[yellow]%}%~%{$reset_color%}"
-PROMPT='$(virtualenv_prompt_info)$ZSH_THEME_NAME%{$reset_color%}@$ZSH_THEME_HOST%{$reset_color%}:$ZSH_THEME_PWD $(my_git_prompt_info)%% '
+PROMPT='$ZSH_THEME_NAME%{$reset_color%}@$ZSH_THEME_HOST%{$reset_color%}:$ZSH_THEME_PWD $(my_git_prompt_info)%% '
 export VIRTUAL_ENV_DISABLE_PROMPT=0
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[white]%}("
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$fg[white]%}) %{$reset_color%}"
@@ -146,6 +128,7 @@ alias -g ccat='source-highlight --out-format=esc256 -o STDOUT -i'
 alias -g getip='curl icanhazip.com'
 alias -g py='python'
 alias -g py3='python3'
+alias -g python='python3'
 alias -g pip='pip3'
 alias -g cod='code'  # I'm bad at spelling
 alias -g gti='git'
@@ -261,25 +244,6 @@ vboxip() {
         VMIP=$(VBoxManage guestproperty get "$VM" "/VirtualBox/GuestInfo/Net/0/V4/IP" | sed -e 's/Value: //g')
         printf "VM-IP: %-16s VM-Name: %-50s\n" "$VMIP" "$VMNAME"
     } done
-}
-
-newvenv() {
-    venv_name=$1
-
-    if [ -z "$venv_name" ]; then
-        venv_name=$(basename "$PWD")
-    fi
-
-    echo "creating virtual environment: $venv_name"
-
-    if command -v pyenv 1>/dev/null 2>&1; then
-        pyenv virtualenv 3.6.11 "$venv_name" || { echo "failed to create virtualenv"; return 1; }
-        echo "$venv_name" > .python-version
-    else
-        virtualenv -p python3 "$venv_name" || { echo "failed to created virtualenv"; return 1; }
-        # shellcheck source=/dev/null
-        . "./$venv_name/bin/activate"
-    fi
 }
 
 fnd() {
