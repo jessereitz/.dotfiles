@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 import argparse
+from zoneinfo import ZoneInfo
+from datetime import datetime, timezone
 
-import arrow
 
-
-def main(utc_time):
-    if utc_time:
-        print(arrow.get(utc_time).to('US/Central'))
-    else:
-        print(arrow.utcnow())
-
+def main(tz):
+    tzinfo = None
+    if tz != 'local':
+        tzinfo = ZoneInfo(tz) if tz else timezone.utc
+    print(datetime.now(tz=tzinfo))
+    
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('utc_time', nargs='?', type=str, default=None)
+    parser.add_argument('--tz', nargs='?', type=str, default=None)
 
     args = parser.parse_args()
-    main(args.utc_time)
+    main(args.tz)

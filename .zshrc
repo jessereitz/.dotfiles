@@ -1,7 +1,11 @@
 eval $(/opt/homebrew/bin/brew shellenv)
 export PATH="/opt/homebrew/bin:$PATH"
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+export PATH="$HOME/.dotfiles/own_scripts:$PATH"
 
+######################################################################
+# ZSH Setup
+######################################################################
 setopt NO_CASE_GLOB
 setopt AUTO_CD
 
@@ -24,53 +28,39 @@ SAVEHIST=500000
 HISTSIZE=500000
 HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
 
-# The following lines were added by compinstall
-
 zstyle ':completion:*' completer _expand _complete _ignored _correct _approximate
 zstyle :compinstall filename '/Users/${USER}/.zshrc'
-
 autoload -Uz compinit
 compinit
-# End of lines added by compinstall
 
 autoload -U select-word-style
 select-word-style bash
 
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+######################################################################
+# Python Setup
+######################################################################
+export PYTHONDONTWRITEBYTECODE=1
 
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+if foobar_loc="$(type -p "pyenv")" || [[ -z $foobar_loc ]]; then
+    # install foobar here
+    export PYENV_ROOT="$HOME/.pyenv"
+    [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
+fi
+
+######################################################################
+# Oh-My-ZSH Setup
+######################################################################
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/${USER}/.oh-my-zsh"
-
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time oh-my-zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-# ZSH_THEME="robbyrussell"
-# ZSH_THEME="clean"
-# ZSH_THEME="essembeh"
-
-# Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS="true"
-
-# Uncomment the following line to enable command auto-correction.
+DISABLE_UPDATE_PROMPT=true
 ENABLE_CORRECTION="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
-
-
-# Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-
+plugins=(git pyenv)
 source $ZSH/oh-my-zsh.sh
 
 # PROMPT STUFF
@@ -78,17 +68,24 @@ function my_git_prompt_info() {
 	ref=$(git symbolic-ref HEAD 2> /dev/null) || return
 	GIT_STATUS=$(git_prompt_status)
 	[[ -n $GIT_STATUS ]] && GIT_STATUS=" $GIT_STATUS"
-	echo "%{$fg[white]%}(%{$fg[green]%}${ref#refs/heads/}$GIT_STATUS%{$fg[white]%})%{$reset_color%}"
+	echo "%{$fg[green]%}git:(%{$fg[yellow]%}${ref#refs/heads/}$GIT_STATUS%{$fg[green]%})%{$reset_color%}"
+}
+
+function python_virtualenv_info() {
+    if (( ${+VIRTUAL_ENV} )); then
+        echo "%{$fg[yellow]%}${VIRTUAL_ENV:t}%{$reset_color%}"
+    fi
 }
 
 if [ -z "$DISPLAY_HOSTNAME" ]; then
-    DISPLAY_HOSTNAME=$(hostname)
+    DISPLAY_HOSTNAME=$(hostname) 
+    DISPLAY_HOSTNAME="${${(%):-%M}%.local}"
 fi
 # Colored prompt
 ZSH_THEME_NAME="%{$fg[cyan]%}%n"
 ZSH_THEME_HOST="%{$fg[green]%}$DISPLAY_HOSTNAME"
 ZSH_THEME_PWD="%{$fg[yellow]%}%~%{$reset_color%}"
-PROMPT='$ZSH_THEME_NAME%{$reset_color%}@$ZSH_THEME_HOST%{$reset_color%}:$ZSH_THEME_PWD $(my_git_prompt_info)%% '
+PROMPT='$(python_virtualenv_info) $ZSH_THEME_NAME%{$reset_color%}@$ZSH_THEME_HOST%{$reset_color%}:$ZSH_THEME_PWD $(my_git_prompt_info)%% '
 export VIRTUAL_ENV_DISABLE_PROMPT=0
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[white]%}("
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$fg[white]%}) %{$reset_color%}"
@@ -99,24 +96,6 @@ ZSH_THEME_GIT_PROMPT_RENAMED="~"
 ZSH_THEME_GIT_PROMPT_DELETED="!"
 ZSH_THEME_GIT_PROMPT_UNMERGED="?"
 ZSH_THEME_GIT_PROMPT_STASHED="%{$fg[blue]%}$"
-
-
-
-unameOut="$(uname -s)"
-case "${unameOut}" in
-    Linux*)
-        OS_ENV=Linux
-        ;;
-    Darwin*)
-        OS_ENV=Darwin
-        ;;
-    *)
-        OS_ENV="UNKNOWN:${unameOut}"
-        ;;
-esac
-export OS_ENV=$OS_ENV
-# export ZSH_CONFIG="$HOME/.dotfiles"
-# export CONFIG_FILE="$HOME/$_config_file"
 
 ######################################################################
 # Aliases: A simple affair
@@ -135,58 +114,6 @@ alias -g gti='git'
 alias -g resource='. $HOME/.zshrc'
 
 ###################################################################
-
-# Backup/Restore Gnome terminal
-terminal() {
-    if [ ! "$OS_ENV" = "Linux" ]; then
-        echo "This isn't Linux. Don't even try."
-        return
-    fi
-
-    settings_file=$BASH_CONFIG/terminal_configs/gnome_terminal_settings.txt
-    action=$1
-
-    case "$action" in
-        backup)     ;;
-        load)       ;;
-        *)          action="ERR";;
-    esac
-
-    if [ $action = "ERR" ]; then
-        echo "Invalid action ${action}."
-        echo "Usage: terminal [action=backup|load] <settings_file>"
-    fi
-
-    if [ $action = "backup" ]; then
-        echo "Saving Gnome terminal settings to ${settings_file}"
-        dconf dump /org/gnome/terminal/ > "$settings_file"
-        echo "Done."
-    fi
-
-    if [ $action = "load" ]; then
-        custom_settings_file=$2
-        if [ -z "$custom_settings_file" ]; then
-            echo "No settings file provided. Using default $settings_file"
-        else
-            settings_file=$custom_settings_file
-        fi
-
-        echo "Resetting settings."
-        dconf reset -f /org/gnome/terminal/
-
-        echo "Loading custom settings."
-        dconf load /org/gnome/terminal/ < "$settings_file"
-    fi
-}
-
-flushdns() {
-    if [ "$OS_ENV" = "Darwin" ]; then
-        sudo killall -HUP mDNSResponder
-        return
-    fi
-    sudo systemd-resolve --flush-caches
-    sudo systemctl restart systemd-resolved.service
-}
 
 up() {
     # Go up a number of directories while preserving directory history
@@ -231,25 +158,6 @@ pushit() {
     git push -u origin HEAD
 }
 
-pullit() {
-    pushit &&
-    prettypull
-}
-
-vboxip() {
-    # List all IP addresses of running VirtualBox VMs -> https://superuser.com/a/1530741
-    for VM in $(VBoxManage list runningvms | awk -F\{ '{print $2}' | sed -e 's/}//g');
-    do {
-        VMNAME="$(VBoxManage showvminfo "$VM" --machinereadable | awk -F= '/^name/{print $2}')"
-        VMIP=$(VBoxManage guestproperty get "$VM" "/VirtualBox/GuestInfo/Net/0/V4/IP" | sed -e 's/Value: //g')
-        printf "VM-IP: %-16s VM-Name: %-50s\n" "$VMIP" "$VMNAME"
-    } done
-}
-
-fnd() {
-    find ./ -name "$1"
-}
-
 dockerkillall() {
     echo "Killing all running docker containers"
     for ctn_id in $(docker ps -q);
@@ -259,5 +167,3 @@ dockerkillall() {
     } done;
     echo "All running containers killed"
 }
-
-export PYTHONDONTWRITEBYTECODE=1
