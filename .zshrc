@@ -63,12 +63,12 @@ lazy_load_nvm() {
 }
 
 node() {
-  lazy_load_nvm &&
+  lazy_load_nvm
   node $@
 }
 
 nvm() {
-  lazy_load_nvm &&
+  lazy_load_nvm
   nvm $@
 }
 
