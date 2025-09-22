@@ -1,7 +1,19 @@
-eval $(/opt/homebrew/bin/brew shellenv)
-export PATH="/opt/homebrew/bin:$PATH"
-export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+if [[ -n "$ZSH_DEBUGRC" ]]; then
+  zmodload zsh/zprof
+fi
+
 export PATH="$HOME/.dotfiles/own_scripts:$PATH"
+
+unameOut="$(uname -s)" &&
+case "${unameOut}" in
+    Darwin*)
+        # Set up Homebrew on MacOS
+        eval $(/opt/homebrew/bin/brew shellenv)
+        export PATH="/opt/homebrew/bin:$PATH"
+        export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+        ;;
+        *)          echo "unkown OS" && exit;;
+esac
 
 ######################################################################
 # ZSH Setup
@@ -14,7 +26,7 @@ setopt CORRECT
 setopt CORRECT_ALL
 
 # Configure ZSH history
-setopt EXTENDED_HISTORY # store additinoal info in .zsh_history
+setopt EXTENDED_HISTORY # store additional info in .zsh_history
 setopt SHARE_HISTORY # share history across sessions
 setopt APPEND_HISTORY # append to history instead of overwriting it
 setopt INC_APPEND_HISTORY # immediately append commands to history instead of waiting for exit
@@ -37,13 +49,30 @@ autoload -U select-word-style
 select-word-style bash
 
 ######################################################################
-# Python Setup
+# Node + Python Setup
 ######################################################################
-export PYTHONDONTWRITEBYTECODE=1
+lazy_load_nvm() {
+    # Lazy load nvm when node or nvm is called
+    # Setting up nvm is slow, so we only want to do it if we need it
+    # Credit: https://github.com/nvm-sh/nvm/issues/2724#issuecomment-1336497491
+    unset -f node nvm
+    export NVM_DIR=~/.nvm
+    [[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"  # This loads nvm
+    [ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+}
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+node() {
+  lazy_load_nvm &&
+  node $@
+}
+
+nvm() {
+  lazy_load_nvm &&
+  nvm $@
+}
+
+export PYTHONDONTWRITEBYTECODE=1
 
 if foobar_loc="$(type -p "pyenv")" || [[ -z $foobar_loc ]]; then
     # install foobar here
@@ -107,11 +136,10 @@ alias -g ccat='source-highlight --out-format=esc256 -o STDOUT -i'
 alias -g getip='curl icanhazip.com'
 alias -g py='python'
 alias -g py3='python3'
-alias -g python='python3'
-alias -g pip='pip3'
 alias -g cod='code'  # I'm bad at spelling
 alias -g gti='git'
 alias -g resource='. $HOME/.zshrc'
+alias -g zdebug='time ZSH_DEBUGRC=1 zsh -i -c exit'
 
 ###################################################################
 
@@ -167,3 +195,7 @@ dockerkillall() {
     } done;
     echo "All running containers killed"
 }
+
+if [[ -n "$ZSH_DEBUGRC" ]]; then
+  zprof
+fi
